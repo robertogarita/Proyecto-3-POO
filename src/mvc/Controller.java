@@ -52,7 +52,7 @@ public class Controller extends JFrame implements KeyListener, MouseListener {
         } catch (NullPointerException ex) {
         }
 
-        jObject.put(btnPressed, btnPressed);
+        jObject.put("KEY", btnPressed);
 
         clientControl = new Client(6000, jObject.toString());
         Thread t = new Thread(clientControl);

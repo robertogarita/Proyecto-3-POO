@@ -5,11 +5,12 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Observable;
 
-public class Server implements Runnable {
+public class Server extends Observable implements Runnable {
 
     private int PORT;
-    private String instruction = "";
+    private String messageIncome;
 
     public Server(int PORT) {
         this.PORT = PORT;
@@ -27,15 +28,18 @@ public class Server implements Runnable {
             server = new ServerSocket(PORT);
 
             while(true){
-                System.out.println("Esperando cliente");
+                //System.out.println("Esperando cliente");
                 sc = server.accept();
-                System.out.println("Cliente conectado");
+                //System.out.println("Cliente conectado");
 
                 in = new DataInputStream(sc.getInputStream());
                 out = new DataOutputStream(sc.getOutputStream());
 
-                out.writeUTF(instruction);
-                instruction = in.readUTF();
+                messageIncome = in.readUTF();
+
+                this.setChanged();
+                this.notifyObservers(messageIncome);
+                this.clearChanged();
 
                 sc.close();
             }
@@ -44,5 +48,6 @@ public class Server implements Runnable {
             e.printStackTrace();
         }
     }
-    
+
+    public void getInfo(){}
 }

@@ -1,53 +1,60 @@
 package mvc;
 
+import java.util.Observable;
+import java.util.Observer;
 import javax.swing.JFrame;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import org.json.JSONArray;
+import java.awt.*;
+import sockets.Server;
 
-import sockets.Client;
 
-public class Screen extends JFrame implements MouseListener{
+public class Screen extends JFrame implements Observer{
 
-    Client clientScreen;
-    public Screen(){
-        
+    private static final long serialVersionUID = 1L;
+    private Server s;
+    private int matriz[][];
+    private JSONArray moveCollection;
+    private int X;
+    private int Y;
+
+    public Screen() {
+
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setLayout(null);
         setVisible(true);
-        setSize(500,500);
-        addMouseListener(this);
-    }
+        setSize(700, 700);
 
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        clientScreen = new Client(6000, null);
-        Thread t = new Thread(clientScreen);
+        s = new Server(7000);
+        s.addObserver(this);
+        Thread t = new Thread(s);
         t.start();
     }
 
     @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-
+    public void paint(Graphics g) {
+        super.paint(g);
+        drawCharacter(g);
     }
 
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
+    public void drawCharacter(Graphics g){
+        X *= 14;
+        Y *= 14;
 
+        g.setColor(Color.CYAN);
+        g.fillOval(X, Y, 14, 14);
     }
 
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-
-    }
     
-    public static void main(String[] args) {
-        new Screen();
+    @Override
+    public void update(Observable o, Object arg) {
+        moveCollection = new JSONArray(arg.toString());
+
+        String PosX = String.valueOf(moveCollection.get(0));
+        String PosY = String.valueOf(moveCollection.get(1));
+
+        X = Integer.parseInt(PosX);
+        Y = Integer.parseInt(PosY);
+
+        repaint();
     }
 }
