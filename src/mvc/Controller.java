@@ -33,6 +33,7 @@ public class Controller extends JFrame implements KeyListener, MouseListener {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLayout(null);
         setSize(700, 360);
+        getContentPane().setBackground(new Color(215,215,215));
         setVisible(true);
         addKeyListener(this);
         addMouseListener(this);
@@ -142,9 +143,14 @@ public class Controller extends JFrame implements KeyListener, MouseListener {
                     break;
             }
         }
-
-        g.setColor(new Color(183, 28, 28));
-        g.fillOval(425, 75, 200, 200);
+        if(btnPressed == "k"){
+            System.out.println(btnPressed);
+            g.setColor(new Color(140, 22, 22));
+            g.fillOval(425, 75, 200, 200);
+        }else{
+            g.setColor(new Color(183, 28, 28));
+            g.fillOval(425, 75, 200, 200);
+        }
     }
 
     private void setControlArrows(Graphics g) {
