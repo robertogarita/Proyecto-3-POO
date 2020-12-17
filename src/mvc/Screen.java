@@ -2,6 +2,7 @@ package mvc;
 
 import java.util.Observable;
 import java.util.Observer;
+import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -19,8 +20,8 @@ public class Screen extends JFrame implements Observer {
     private JSONArray moveCollection;
     private int X;
     private int Y;
-    private boolean startOne = true;
-    String Mapa, PosX, PosY;
+    private boolean startOne = true, gameIn = false;
+    String Mapa = "", PosX, PosY, MapaAnterior = "";
     Image fondo;
     JLabel label1;
 
@@ -54,23 +55,29 @@ public class Screen extends JFrame implements Observer {
             }
             Back();
         }
-        drawCharacter(g);
+        if(gameIn){
+            drawCharacter(g);
+        }
     }
-    public void Back(){
-        ImageIcon icon = new ImageIcon(loadImage(Mapa));
-        label1.setIcon(icon);
+
+    public void Back() {
+        try {
+            MapaAnterior = Mapa;
+            ImageIcon icon = new ImageIcon(loadImage(Mapa));
+            label1.setIcon(icon);
+        } catch (NullPointerException ex) {
+        }
     }
+
     public void drawCharacter(Graphics g) {
         X *= 14;
         Y *= 14;
-
         g.setColor(Color.YELLOW);
         g.fillOval(X, Y, 14, 14);
         startOne = false;
     }
 
-
-    public Image loadImage(String file){
+    public Image loadImage(String file) {
         try {
             return ImageIO.read(getClass().getResourceAsStream(file));
         } catch (IOException e) {
@@ -78,14 +85,18 @@ public class Screen extends JFrame implements Observer {
         }
     }
 
-
     @Override
     public void update(Observable o, Object arg) {
         moveCollection = new JSONArray(arg.toString());
+        gameIn = true;
 
         PosX = String.valueOf(moveCollection.get(0));
         PosY = String.valueOf(moveCollection.get(1));
         Mapa = String.valueOf(moveCollection.get(2));
+
+        if(!(MapaAnterior.equals(Mapa))){
+            startOne = true;
+        }
 
         X = Integer.parseInt(PosX);
         Y = Integer.parseInt(PosY);

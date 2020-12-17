@@ -3,23 +3,41 @@ package mvc;
 import java.util.ArrayList;
 import java.util.Observable;
 import java.util.Observer;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import games.JuegoDePrueba;
 import games.pacman.Pacman;
+import games.spaceInvaders.SInvaders;
 import sockets.Client;
 import sockets.Server;
 
-public class Console1 implements Observer {
+public class Console1 extends JFrame implements Observer, ActionListener {
 
     private JSONObject keyCollection;
-    private JSONArray moveCollection, Obstacules;
+    private JSONArray moveCollection;
     private String keyPressed;
-    private Boolean gameInside = false;
+    private Boolean gameInside = false, haveObs, UpDownMove;
     private JuegoDePrueba JP;
     private ArrayList<int[]> obsSelect;
+    private JButton game1, game2;
+    Screen screen;
 
     public Console1() {
+        setBounds(900, 100, 300, 300);
+        setVisible(true);
+
+        game1 = new JButton("Pacman");
+        game1.setBounds(75, 100, 150, 30);
+        game1.addActionListener(this);
+        add(game1);
+        game2 = new JButton("Space Invaders");
+        game2.setBounds(75, 145, 150, 30);
+        game2.addActionListener(this);
+        add(game2);
 
         Server s = new Server(6000);
         s.addObserver(this);
@@ -55,11 +73,6 @@ public class Console1 implements Observer {
     }
 
     public void engine() {
-        if (!gameInside) {
-            JP = new Pacman(24, 30, "/resources/MapaPacman.png");
-            gameInside = true;
-        }
-
         if (keyPressed != null) {
             switch (keyPressed) {
                 case "d":
@@ -75,25 +88,25 @@ public class Console1 implements Observer {
                     break;
 
                 case "w":
-                    if (CheckMove(JP.getPosX(), JP.getPosY() - 1)) {
+                    if (CheckMove(JP.getPosX(), JP.getPosY() - 1) && UpDownMove) {
                         JP.setPosY(JP.getPosY() - 1);
                     }
                     break;
 
                 case "s":
-                    if (CheckMove(JP.getPosX(), JP.getPosY() + 1)) {
+                    if (CheckMove(JP.getPosX(), JP.getPosY() + 1) && UpDownMove) {
                         JP.setPosY(JP.getPosY() + 1);
                     }
                     break;
             }
+            comunicateScreen();
         }
-        comunicateScreen();
     }
 
     public boolean CheckMove(int futureX, int futureY) {
         if (futureX == 0 || futureX == 49 || futureY == 0 || futureY == 49) {
             return false;
-        } else {
+        } else if(haveObs){
 
             obsSelect = new ArrayList<int[]>();
 
@@ -126,7 +139,6 @@ public class Console1 implements Observer {
                     return false;
                 }
             }
-
             for (int i = 3; i < listSq.length; i += 4) {
 
                 lim = listSq[i];
@@ -142,7 +154,28 @@ public class Console1 implements Observer {
             }
             return true;
         }
-
+        return true;
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        if(e.getSource() == game1){
+            JP = new Pacman(24, 30, "/resources/MapaPacman.png");
+            game1.setEnabled(false);
+            game2.setEnabled(true);
+            gameInside = true;
+            haveObs = true;
+            UpDownMove = true;
+            comunicateScreen();
+        }
+        if(e.getSource() == game2){
+            game1.setEnabled(true);
+            game2.setEnabled(false);
+            JP = new SInvaders(24, 45, "/resources/MapaSpaceInvaders.png");
+            gameInside = true;
+            haveObs = false;
+            UpDownMove = false;
+            comunicateScreen();
+        }
     }
 
     public static void main(String[] args) {
