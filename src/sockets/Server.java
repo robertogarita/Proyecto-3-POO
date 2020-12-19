@@ -1,7 +1,6 @@
 package sockets;
 
 import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -10,7 +9,7 @@ import java.util.Observable;
 public class Server extends Observable implements Runnable {
 
     private int PORT;
-    private String messageIncome;
+    private String messageSent;
 
     public Server(int PORT) {
         this.PORT = PORT;
@@ -22,7 +21,6 @@ public class Server extends Observable implements Runnable {
         ServerSocket server;
         Socket sc;
         DataInputStream in;
-        DataOutputStream out;
 
         try {
             server = new ServerSocket(PORT);
@@ -33,12 +31,11 @@ public class Server extends Observable implements Runnable {
                 //System.out.println("Cliente conectado");
 
                 in = new DataInputStream(sc.getInputStream());
-                out = new DataOutputStream(sc.getOutputStream());
 
-                messageIncome = in.readUTF();
+                messageSent = in.readUTF();
 
                 this.setChanged();
-                this.notifyObservers(messageIncome);
+                this.notifyObservers(messageSent);
                 this.clearChanged();
 
                 sc.close();
@@ -48,6 +45,4 @@ public class Server extends Observable implements Runnable {
             e.printStackTrace();
         }
     }
-
-    public void getInfo(){}
 }

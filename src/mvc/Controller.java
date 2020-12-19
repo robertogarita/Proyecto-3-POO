@@ -5,14 +5,12 @@ import javax.swing.JFrame;
 import org.json.JSONObject;
 import sockets.Client;
 import java.awt.event.KeyListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.event.KeyEvent;
 import java.awt.*;
 
-public class Controller extends JFrame implements KeyListener, MouseListener {
+public class Controller extends JFrame implements KeyListener{
 
     private static final long serialVersionUID = 1L;
     
@@ -21,10 +19,8 @@ public class Controller extends JFrame implements KeyListener, MouseListener {
     private String btnPressed = "";
     private int counter = 0;
     private boolean releaseKey = true;
-
     private JSONObject jObject;
-
-    Client clientControl;
+    private Client clientControl;
 
     public Controller() {
         jObject = new JSONObject();
@@ -36,7 +32,6 @@ public class Controller extends JFrame implements KeyListener, MouseListener {
         getContentPane().setBackground(new Color(215,215,215));
         setVisible(true);
         addKeyListener(this);
-        addMouseListener(this);
     }
 
     // ---------------- START User Inputs ------------------------------
@@ -72,27 +67,6 @@ public class Controller extends JFrame implements KeyListener, MouseListener {
         repaint();
         btnPressed = "";
         releaseKey = true;
-    }
-
-    // Mouse actions
-    @Override
-    public void mouseClicked(MouseEvent e) {
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
     }
 
     // ---------------- END User Inputs ------------------------------

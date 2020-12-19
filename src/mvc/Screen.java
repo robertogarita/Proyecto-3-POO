@@ -2,7 +2,6 @@ package mvc;
 
 import java.util.Observable;
 import java.util.Observer;
-import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -18,12 +17,11 @@ public class Screen extends JFrame implements Observer {
     private static final long serialVersionUID = 1L;
     private Server s;
     private JSONArray moveCollection;
-    private int X;
-    private int Y;
+    private int X, ShX = 0;
+    private int Y, ShY = 0;
     private boolean startOne = true, gameIn = false;
-    String Mapa = "", PosX, PosY, MapaAnterior = "";
-    Image fondo;
-    JLabel label1;
+    private String map = "", posX, posY, shotX, shotY, previousMap = "";
+    private JLabel label1;
 
     public Screen() {
         setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -57,16 +55,24 @@ public class Screen extends JFrame implements Observer {
         }
         if(gameIn){
             drawCharacter(g);
+            if(ShY != 0){
+                drawShot(g);
+            }
         }
     }
 
     public void Back() {
         try {
-            MapaAnterior = Mapa;
-            ImageIcon icon = new ImageIcon(loadImage(Mapa));
+            previousMap = map;
+            ImageIcon icon = new ImageIcon(loadImage(map));
             label1.setIcon(icon);
         } catch (NullPointerException ex) {
         }
+    }
+
+    public void drawShot(Graphics g){
+        g.setColor(Color.GREEN);
+        g.fillRect(ShX*14, ShY*14, 14, 14);
     }
 
     public void drawCharacter(Graphics g) {
@@ -90,16 +96,20 @@ public class Screen extends JFrame implements Observer {
         moveCollection = new JSONArray(arg.toString());
         gameIn = true;
 
-        PosX = String.valueOf(moveCollection.get(0));
-        PosY = String.valueOf(moveCollection.get(1));
-        Mapa = String.valueOf(moveCollection.get(2));
+        posX = String.valueOf(moveCollection.get(0));
+        posY = String.valueOf(moveCollection.get(1));
+        map = String.valueOf(moveCollection.get(2));
+        shotX = String.valueOf(moveCollection.get(3));
+        shotY = String.valueOf(moveCollection.get(4));
 
-        if(!(MapaAnterior.equals(Mapa))){
+        if(!(previousMap.equals(map))){
             startOne = true;
         }
 
-        X = Integer.parseInt(PosX);
-        Y = Integer.parseInt(PosY);
+        X = Integer.parseInt(posX);
+        Y = Integer.parseInt(posY);
+        ShY = Integer.parseInt(shotY);
+        ShX = Integer.parseInt(shotX);
         repaint();
     }
 }

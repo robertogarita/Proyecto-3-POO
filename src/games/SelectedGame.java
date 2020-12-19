@@ -2,19 +2,19 @@ package games;
 
 
 
-public class JuegoDePrueba {
+public class SelectedGame {
 
-    private int PosX;
-    private int PosY;
+    private int PosX, ShotX;
+    private int PosY, ShotY;
     private String filePath;
     private int ObstaculesSquare1[], ObstaculesLine1[];
     private int ObstaculesSquare2[], ObstaculesLine2[];
     private int ObstaculesSquare3[], ObstaculesLine3[];
     private int ObstaculesSquare4[], ObstaculesLine4[];
 
-    public JuegoDePrueba(int PosX, int PosY, int[] ObsSquare1, int[]ObsLine1,
+    public SelectedGame(int PosX, int PosY, int[] ObsSquare1, int[]ObsLine1,
     int[] ObsSquare2, int[]ObsLine2, int[] ObsSquare3, int[]ObsLine3,
-    int[] ObsSquare4, int[]ObsLine4, String filePath){
+    int[] ObsSquare4, int[]ObsLine4, int ShotX, int ShotY, String filePath){
 
         this.PosX = PosX;
         this.PosY = PosY;
@@ -26,6 +26,8 @@ public class JuegoDePrueba {
         this.ObstaculesLine3 = ObsLine3;
         this.ObstaculesSquare4 = ObsSquare4;
         this.ObstaculesLine4 = ObsLine4;
+        this.ShotX = ShotX;
+        this.ShotY = ShotY;
         this.filePath = filePath;
     }
 
@@ -44,8 +46,19 @@ public class JuegoDePrueba {
     public void setPosY(int PosY){
         this.PosY = PosY;
     }
-    public void getEnemies(){}
-    
+    public int getShotX(){
+        return ShotX;
+    }
+    public void setShotX(int ShotX){
+        this.ShotX = ShotX;
+    }
+    public int getShotY(){
+        return ShotY;
+    }
+    public void setShotY(int ShotY){
+        this.ShotY = ShotY;
+    }
+
     public String getfilePath(){
         return filePath;
     }
@@ -72,7 +85,7 @@ public class JuegoDePrueba {
     public int[] getObstaculesLine3(){
         return ObstaculesLine3;
     }
-
+    
     public int[] getObstaculesSquare4(){
         return ObstaculesSquare4;
     }

@@ -1,8 +1,8 @@
 package games.pacman;
 
-import games.JuegoDePrueba;
+import games.SelectedGame;
 
-public class Pacman extends JuegoDePrueba{
+public class Pacman extends SelectedGame{
 
 	private static int square1[] = {3,3,10,4,3,10,10,3,13,3,21,10,1,16,12,8,16,19,21,1,18,23,24,1};
 	private static int square2[] = {28,3,36,10,39,3,46,4,39,10,46,3,37,16,48,8,28,19,33,1,25,23,31,1};
@@ -14,6 +14,6 @@ public class Pacman extends JuegoDePrueba{
 	private static int line4[] = {44,31,48,31,26,32,31,32,25,32,25,36,26,39,31,39,28,42,33,42,28,43,28,44,25,39,25,46};
 
 	public Pacman(int PosX, int PosY, String filePath) {
-		super(PosX, PosY, square1,line1, square2,line2, square3,line3, square4,line4, filePath);
+		super(PosX, PosY, square1,line1, square2,line2, square3,line3, square4,line4, 0,0, filePath);
 	}
 }
